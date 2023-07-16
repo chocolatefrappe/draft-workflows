@@ -1,0 +1,11 @@
+name: test
+
+on:
+  push:
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - run: echo "module=$(jq -cr '' nginx-modules.json)" >> "$GITHUB_OUTPUT"
