@@ -8,4 +8,16 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - run: echo "module=$(jq -cr '' nginx-modules.json)" >> "$GITHUB_OUTPUT"
+      - id: modules
+        run: echo "module=$(jq -cr '' nginx-modules.json)" >> "$GITHUB_OUTPUT"
+    outputs:
+      module: ${{ steps.modules.outputs.module }}
+
+  build:
+    needs: generate
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        module: ${{ fromJSON(needs.generate.outputs.module) }}
+    steps:
+      - run: echo ${{ matrix.module }}
